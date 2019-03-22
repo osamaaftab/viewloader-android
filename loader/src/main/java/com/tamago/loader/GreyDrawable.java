@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -33,6 +34,10 @@ public class GreyDrawable extends Drawable {
 
     boolean fadein = false;
 
+    boolean round = false;
+
+    int radius = 0;
+
     int grayColor = DEFAULT_GREY;
     ValueAnimator valueAnimator;
     Paint paint;
@@ -46,7 +51,11 @@ public class GreyDrawable extends Drawable {
     @Override
     public void draw(Canvas canvas) {
         paint.setColor(grayColor);
-        canvas.drawRect(canvas.getClipBounds(), paint);
+        if (round) {
+            canvas.drawRoundRect(new RectF(canvas.getClipBounds()), radius, radius, paint);
+        } else {
+            canvas.drawRect(canvas.getClipBounds(), paint);
+        }
     }
 
     @Override
@@ -62,6 +71,14 @@ public class GreyDrawable extends Drawable {
         this.fadein = fadein;
     }
 
+    public void setRadius(int radius){
+        this.radius = radius;
+    }
+
+
+    public void setRoundCorners(boolean round){
+        this.round = round;
+    }
     @Override
     public void setColorFilter(ColorFilter colorFilter) {
 

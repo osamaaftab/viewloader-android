@@ -27,10 +27,12 @@ public abstract class ViewState<V extends View> {
         this.background = view.getBackground();
     }
 
-    public void start(boolean fadein) {
+    public void start(boolean fadein,boolean roundCorner,int radius) {
         GreyDrawable greyDrawable = new GreyDrawable();
         this.view.setBackgroundDrawable(greyDrawable);
         greyDrawable.setFadein(fadein);
+        greyDrawable.setRadius(radius);
+        greyDrawable.setRoundCorners(roundCorner);
         greyDrawable.start(view, darker);
     }
 

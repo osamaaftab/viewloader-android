@@ -17,25 +17,29 @@ import java.util.HashMap;
  * Created by osamaaftab on 9/12/18.
  */
 
-public class FiftyShadesOf {
+public class ViewLoader {
     private final Context context;
 
     private HashMap<View, ViewState> viewsState;
 
     boolean fadein = true;
 
+    boolean round = false;
+
+    int radius = 0;
+
     private boolean started;
 
-    public FiftyShadesOf(Context context) {
+    public ViewLoader(Context context) {
         this.context = context;
         this.viewsState = new HashMap<>();
     }
 
-    public static FiftyShadesOf with(Context context) {
-        return new FiftyShadesOf(context);
+    public static ViewLoader with(Context context) {
+        return new ViewLoader(context);
     }
 
-    public FiftyShadesOf on(int... viewsId) {
+    public ViewLoader on(int... viewsId) {
         if (context instanceof Activity) {
             Activity activity = (Activity) context;
             for (int view : viewsId) {
@@ -45,8 +49,18 @@ public class FiftyShadesOf {
         return this;
     }
 
-    public FiftyShadesOf fadein(boolean fadein) {
+    public ViewLoader fadein(boolean fadein) {
         this.fadein = fadein;
+        return this;
+    }
+
+    public ViewLoader roundCorners(boolean round) {
+        this.round = round;
+        return this;
+    }
+
+    public ViewLoader setCorners(int radius) {
+        this.radius = radius;
         return this;
     }
 
@@ -67,20 +81,20 @@ public class FiftyShadesOf {
         }
     }
 
-    public FiftyShadesOf on(View... views) {
+    public ViewLoader on(View... views) {
         for (View view : views)
             add(view);
         return this;
     }
 
-    public FiftyShadesOf except(View... views) {
+    public ViewLoader except(View... views) {
         for (View view : views) {
             this.viewsState.remove(view);
         }
         return this;
     }
 
-    public FiftyShadesOf start() {
+    public ViewLoader start() {
         if (!started) {
             //prepare for starting
             for (ViewState viewState : viewsState.values()) {
@@ -89,13 +103,13 @@ public class FiftyShadesOf {
             started = true;
             //start
             for (ViewState viewState : viewsState.values()) {
-                viewState.start(fadein);
+                viewState.start(fadein, round,radius);
             }
         }
         return this;
     }
 
-    public FiftyShadesOf stop() {
+    public ViewLoader stop() {
         if (started) {
             for (ViewState viewState : viewsState.values()) {
                 viewState.stop();
